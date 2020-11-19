@@ -1,0 +1,126 @@
+﻿@model VeciHelpWeb.Models.Organizacion
+@{
+    ViewBag.Title = "Index";
+}
+
+<br />
+<label>@TempData["MensajeEnrolar"] </label>
+<br />
+<h1>Crea una nueva Organización</h1>
+<div>
+    @using (Html.BeginForm("CerrarSesion", "Principal", FormMethod.Post))
+    {
+        <input type="submit" name="button" class="button1" value="LogOut @TempData["NombreUsuario"]" />
+    }
+</div>
+@using (Html.BeginForm("CrearOrganizacion", "Principal", FormMethod.Post))
+{
+    <div class="jumbotron">
+
+        <div class="form-group">
+            <div class="form-group">
+
+                <span>Nombre de la Organización:</span> @Html.TextBoxFor(m => m.nombreOrg)<br />
+
+                <br />
+                @Html.DropDownList("ddlRegions", ViewBag.regionsItems as List<SelectListItem>,
+                            " -- Seleccionar Regiones --", new { @class = "form-control" })
+                <br />
+                @Html.DropDownList("ddlProvincias", new List<SelectListItem>(),
+                            " -- Seleccionar Provincia --", new { @class = "form-control" })
+
+                <br />
+                @Html.DropDownList("ddlCiudades", new List<SelectListItem>(),
+                            " -- Seleccionar Ciudad --", new { @class = "form-control" })
+
+                <br />
+                @Html.DropDownList("ddlComunass", new List<SelectListItem>(),
+                            " -- Seleccionar Comuna --", new { @class = "form-control" })
+
+                <br />
+                <span>Correo del administrador:</span> @Html.TextBoxFor(m => m.correoAdmin)<br />
+
+
+
+                <input name="submit" type="submit" id="submit" class="btn btn-primary btn-lg btn-warning btn-block" value="Crear Organización">
+
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts {
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            $("#ddlComunass").change(function () {
+                $.get("/admin/Principal/GuardarComuna", { ComunaId: $("#ddlComunass").val() }, function (data) {
+                    // VACIAMOS EL DropDownList
+                    $("#ddlComunas").empty();
+                    // AÑADIMOS UN NUEVO label CON EL NOMBRE DEL ELEMENTO SELECCIONADO
+                    $("#ddlComunas").append("<option value> -- Seleccionar Comuna de " + $("#ddlCiudades option:selected").text() + " --</option>")
+                    // CONSTRUIMOS EL DropDownList A PARTIR DEL RESULTADO Json (data)
+                    $.each(data, function (index, row) {
+                        $("#ddlComunas").append("<option value='" + row.idComuna + "'>" + row.nombre + "</option>")
+                    });
+                });
+            });
+        });
+    </script>
+
+    <script>
+            $(document).ready(function () {
+                $("#ddlRegions").change(function () {
+                    $.get("/admin/Principal/GetProvinciasList", { RegionId: $("#ddlRegions").val() }, function (data) {
+                        // VACIAMOS EL DropDownList
+                        $("#ddlProvincias").empty();
+                        // AÑADIMOS UN NUEVO label CON EL NOMBRE DEL ELEMENTO SELECCIONADO
+                        $("#ddlProvincias").append("<option value> -- Seleccionar Provincia de " + $("#ddlRegions option:selected").text() + " --</option>")
+                        // CONSTRUIMOS EL DropDownList A PARTIR DEL RESULTADO Json (data)
+                        $.each(data, function (index, row) {
+                            $("#ddlProvincias").append("<option value='" + row.idProvincia + "'>" + row.nombre + "</option>")
+                        });
+                    });
+                });
+            });
+        </script>
+
+
+    <script>
+        $(document).ready(function () {
+            $("#ddlProvincias").change(function () {
+                $.get("/admin/Principal/GetCiudadesList", { ProvinciaId: $("#ddlProvincias").val() }, function (data) {
+                    // VACIAMOS EL DropDownList
+                    $("#ddlCiudades").empty();
+                    // AÑADIMOS UN NUEVO label CON EL NOMBRE DEL ELEMENTO SELECCIONADO
+                    $("#ddlCiudades").append("<option value> -- Seleccionar Ciudad de " + $("#ddlProvincias option:selected").text() + " --</option>")
+                    // CONSTRUIMOS EL DropDownList A PARTIR DEL RESULTADO Json (data)
+                    $.each(data, function (index, row) {
+                        $("#ddlCiudades").append("<option value='" + row.idCiudad + "'>" + row.nombre + "</option>")
+                    });
+                });
+            });
+        });
+    </script>
+
+
+    <script>
+        $(document).ready(function () {
+            $("#ddlCiudades").change(function () {
+                $.get("/admin/Principal/GetComunasList", { CiudadId: $("#ddlCiudades").val() }, function (data) {
+                    // VACIAMOS EL DropDownList
+                    $("#ddlComunass").empty();
+                    // AÑADIMOS UN NUEVO label CON EL NOMBRE DEL ELEMENTO SELECCIONADO
+                    $("#ddlComunass").append("<option value> -- Seleccionar Comuna de " + $("#ddlCiudades option:selected").text() + " --</option>")
+                    // CONSTRUIMOS EL DropDownList A PARTIR DEL RESULTADO Json (data)
+                    $.each(data, function (index, row) {
+                        $("#ddlComunass").append("<option value='" + row.idComuna + "'>" + row.nombre + "</option>")
+                    });
+                });
+            });
+        });
+    </script>
+}

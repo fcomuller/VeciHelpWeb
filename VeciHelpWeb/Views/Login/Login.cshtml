@@ -1,0 +1,39 @@
+﻿@model VeciHelpWeb.Models.Login
+
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+<link href="~/Content/BASIC.css" rel="stylesheet" />
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+        <!-- Tabs Titles -->
+        <!-- Icon -->
+        <div class="fadeIn first">
+            @*<img src="https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.shutterstock.com%2Fes%2Fimage-illustration%2Flogin-icon-buttonloginlogin-button-sign-signsign-164146532&psig=AOvVaw2aLrsoHcn1xbVT2y04hs_c&ust=1605111157935000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCIia0Jev-OwCFQAAAAAdAAAAABAD" id="icon" alt="User Icon" />*@
+        </div>
+
+        <!-- Login Form -->
+        @using (Html.BeginForm("PostLogin", "Login", FormMethod.Post))
+        {
+    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <form>
+        @Html.TextBoxFor(Model => Model.Correo, new { @class = "form-control", @id = "CorreoItem", @placeholder = "Correo" })
+        <br />
+        @Html.ValidationMessageFor(Model => Model.Correo, "", new { @class = "text-danger" })
+        <br />
+        @Html.TextBoxFor(Model => Model.Clave, new { @class = "form-control", @id = "ClaveItem", @placeholder = "Contraseña",@type="password" })
+        <br />
+        @Html.ValidationMessageFor(Model => Model.Clave, "", new { @class = "text-danger" })
+        <br />
+        @*<input type="text" id="login" class="fadeIn second" name="login" placeholder="login">*@
+        @*<input type="text" id="password" class="fadeIn third" name="login" placeholder="password">*@
+        <input type="submit" class="fadeIn fourth" value="Log In">
+    </form>}<!-- Remind Passowrd -->
+        <div id="formFooter">
+            <a class="underlineHover" href="#">Forgot Password?</a>
+        </div>
+
+    </div>
+</div>
